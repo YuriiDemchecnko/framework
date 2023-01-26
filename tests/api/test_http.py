@@ -12,12 +12,13 @@ def test_first_request():
 def test_second_request():
     r = requests.get("https://api.github.com/users/defunkt")
     body = r.json()
-    assert body["login"] == "defunkt"
+    assert body["name"] == "Chris Wanstrath"
     assert r.status_code == 200
     assert r.headers["Server"] == "GitHub.com"
 
 
 @pytest.mark.http
 def test_status_code_request():
-    r = requests.get("https://api.github.com/users/YuriiDemchenko")
-    assert r.status_code == 200
+    r = requests.get(" https://api.github.com/users/sergii_butenko")
+    body = r.json()
+    assert r.status_code == 404
