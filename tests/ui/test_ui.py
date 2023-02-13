@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 @pytest.mark.ui
 def test_check_incorrect_username():
     driver = webdriver.Chrome(
-        service=Service(r"C:\\Users\\Deedg\\framework\\" + "chromedriver.exe")
+        service=Service("C:/Users/Deedg/framework/" + "chromedriver.exe")
     )
 
     driver.get("https://github.com/login")
