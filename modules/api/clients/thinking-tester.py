@@ -71,7 +71,7 @@ class ThinkingTester:
 
         try:
             response = requests.get(url, headers=headers)
-            return response.json()
+            return response.json()  # Returns contact list
 
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
@@ -135,9 +135,9 @@ data_to_update = {
     "street1": "34 Washington St.",
 }
 
-tester = ThinkingTester()
+# tester = ThinkingTester()
 # print(tester.get_user_profile())
 # print(tester.add_contact(contact_data))
 # print(tester.get_contact_list())
 # print(tester.delete_contact("Kelly"))
-print(tester.update_contact("Jolly", data_to_update))
+# print(tester.update_contact("Dolly", data_to_update))
