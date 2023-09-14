@@ -135,8 +135,8 @@ data_to_update = {
     "street1": "34 Washington St.",
 }
 
-# tester = ThinkingTester()
-# print(tester.get_user_profile())
+tester = ThinkingTester()
+print(tester.get_user_profile())
 # print(tester.add_contact(contact_data))
 # print(tester.get_contact_list())
 # print(tester.delete_contact("Kelly"))

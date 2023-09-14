@@ -1,5 +1,6 @@
 import pytest
 from modules.api.clients.github import GitHub
+from modules.api.clients.thinkingtester import ThinkingTester
 
 
 class User:
@@ -31,3 +32,10 @@ def github_api():
     api = GitHub()
 
     yield api
+
+
+@pytest.fixture
+def thinkingTester_api():
+    tt_api = ThinkingTester()
+
+    yield tt_api
