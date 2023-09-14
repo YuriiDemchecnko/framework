@@ -31,6 +31,20 @@ class ThinkingTester:
             print(f"An error occurred: {e}")
             self.token = None
 
+    def get_contact_list(self):
+        url = "https://thinking-tester-contact-list.herokuapp.com/contacts"
+        headers = {
+            "Authorization": self.token,
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+            # return response.json()  # Returns contact list
+            return response.status_code
+
+        except requests.exceptions.RequestException as e:
+            return f"An error occurred: {e}"
+
     def get_user_profile(self):
         if self.token is None:
             return "No token available."
@@ -42,7 +56,8 @@ class ThinkingTester:
 
         try:
             response = requests.get(url, headers=headers)
-            return response.json()
+            # return response.json()
+            return response.status_code
 
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
@@ -59,19 +74,6 @@ class ThinkingTester:
                 url, headers=headers, data=json.dumps(contact_data)
             )
             return response.status_code  # returns 201 if OK
-
-        except requests.exceptions.RequestException as e:
-            return f"An error occurred: {e}"
-
-    def get_contact_list(self):
-        url = "https://thinking-tester-contact-list.herokuapp.com/contacts"
-        headers = {
-            "Authorization": self.token,
-        }
-
-        try:
-            response = requests.get(url, headers=headers)
-            return response.json()  # Returns contact list
 
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
@@ -114,29 +116,8 @@ class ThinkingTester:
                     return f"An error occurred: {e}"
 
 
-contact_data = {
-    "firstName": "Kelly",
-    "lastName": "Goe",
-    "birthdate": "1977-02-01",
-    "email": "kg@fake.com",
-    "phone": "3005555555",
-    "street1": "3 Main St.",
-    "street2": "Apartment C",
-    "city": "Anytown3",
-    "stateProvince": "SA",
-    "postalCode": "56789",
-    "country": "USA",
-}
-
-data_to_update = {
-    "email": "dj1@real.com",
-    "city": "New York",
-    "stateProvince": "NY",
-    "street1": "34 Washington St.",
-}
-
-tester = ThinkingTester()
-print(tester.get_user_profile())
+# tester = ThinkingTester()
+# print(tester.get_user_profile())
 # print(tester.add_contact(contact_data))
 # print(tester.get_contact_list())
 # print(tester.delete_contact("Kelly"))
