@@ -39,8 +39,7 @@ class ThinkingTester:
 
         try:
             response = requests.get(url, headers=headers)
-            # return response.json()  # Returns contact list
-            return response.status_code
+            return response.json()  # Returns contact list
 
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
@@ -56,7 +55,6 @@ class ThinkingTester:
 
         try:
             response = requests.get(url, headers=headers)
-            # return response.json()
             return response.status_code
 
         except requests.exceptions.RequestException as e:
@@ -78,47 +76,52 @@ class ThinkingTester:
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
 
-    def delete_contact(self, first_name):
-        # Get the list of contacts
+    def get_contact(self, first_name):
         contacts = self.get_contact_list()
 
-        # Find the contact with the given first name and last name
+        # Find the contact with the given first name
         for contact in contacts:
             if contact["firstName"] == first_name:
-                # If the contact is found, send a DELETE request to remove it
+                # If the contact is found, get contact data
                 url = f"https://thinking-tester-contact-list.herokuapp.com/contacts/{contact['_id']}"
                 headers = {
                     "Authorization": self.token,
                 }
 
                 try:
-                    response = requests.delete(url, headers=headers)
-                    return response.status_code  # returns 200 if OK, None if not
+                    response = requests.get(url, headers=headers)
+                    return response.json()  # returns json data if OK and None if not
 
                 except requests.exceptions.RequestException as e:
                     return f"An error occurred: {e}"
+
+    def delete_contact(self, first_name):
+        contact_id = self.get_contact(first_name)["_id"]
+        url = (
+            f"https://thinking-tester-contact-list.herokuapp.com/contacts/{contact_id}"
+        )
+        headers = {
+            "Authorization": self.token,
+        }
+        try:
+            response = requests.delete(url, headers=headers)
+            return response.status_code  # returns 200 if OK, None if not
+
+        except requests.exceptions.RequestException as e:
+            return f"An error occurred: {e}"
 
     def update_contact(self, first_name, data):
-        contacts = self.get_contact_list()
-        for contact in contacts:
-            if contact["firstName"] == first_name:
-                # If the contact is found, send a PATCH request to update it
-                url = f"https://thinking-tester-contact-list.herokuapp.com/contacts/{contact['_id']}"
-                headers = {
-                    "Authorization": self.token,
-                }
+        # If the contact is found, send a PATCH request to update it
+        contact_id = self.get_contact(first_name)["_id"]
+        url = (
+            f"https://thinking-tester-contact-list.herokuapp.com/contacts/{contact_id}"
+        )
+        headers = {
+            "Authorization": self.token,
+        }
+        try:
+            response = requests.patch(url, headers=headers, json=data)
+            return response.status_code  # returns 200 if OK, None if not
 
-                try:
-                    response = requests.patch(url, headers=headers, json=data)
-                    return response.status_code  # returns 200 if OK, None if not
-
-                except requests.exceptions.RequestException as e:
-                    return f"An error occurred: {e}"
-
-
-# tester = ThinkingTester()
-# print(tester.get_user_profile())
-# print(tester.add_contact(contact_data))
-# print(tester.get_contact_list())
-# print(tester.delete_contact("Kelly"))
-# print(tester.update_contact("Dolly", data_to_update))
+        except requests.exceptions.RequestException as e:
+            return f"An error occurred: {e}"

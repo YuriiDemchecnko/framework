@@ -10,7 +10,7 @@ def test_user_profile_exists(thinkingTester_api):
 @pytest.mark.ttapi
 def test_contact_list(thinkingTester_api):
     contact_list_statuscode = thinkingTester_api.get_contact_list()
-    assert contact_list_statuscode == 200
+    assert len(contact_list_statuscode) != 0
 
 
 @pytest.mark.ttapi
@@ -54,9 +54,44 @@ def test_add_contact(thinkingTester_api, data):
     assert add_contact_statuscode == 201
 
 
-# data_to_update = {
-#     "email": "dj1@real.com",
-#     "city": "New York",
-#     "stateProvince": "NY",
-#     "street1": "34 Washington St.",
-# }
+@pytest.mark.ttapi
+@pytest.mark.parametrize(
+    "first_name, data",
+    [
+        (
+            "Nelly",
+            {
+                "email": "nj1@real.com",
+                "city": "New York",
+                "stateProvince": "NY",
+                "street1": "34 Washington St.",
+            },
+        ),
+        (
+            "Helly",
+            {
+                "email": "hj2@real.com",
+                "city": "San Fernando",
+                "stateProvince": "CA",
+                "phone": "3333333333",
+                "postalCode": "11111",
+            },
+        ),
+    ],
+)
+def test_update_contact(thinkingTester_api, first_name, data):
+    update_contact_statuscode = thinkingTester_api.update_contact(first_name, data)
+    assert update_contact_statuscode == 200
+
+
+@pytest.mark.ttapi
+@pytest.mark.parametrize("first_name", [("Nelly",), ("Helly",)])
+def test_delete_contact(thinkingTester_api, first_name):
+    delete_contact_statuscode = thinkingTester_api.delete_contact(first_name[0])
+    assert delete_contact_statuscode == 200
+
+
+@pytest.mark.ttapi
+def test_get_contact_data(thinkingTester_api):
+    get_contact_data = thinkingTester_api.get_contact("Felly")
+    assert get_contact_data != None
