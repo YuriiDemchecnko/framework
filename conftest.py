@@ -1,6 +1,7 @@
 import pytest
 from modules.api.clients.github import GitHub
 from modules.api.clients.thinkingtester import ThinkingTester
+from modules.ui.page_objects.sign_in_tt_page import SignInPage
 
 
 class User:
@@ -39,3 +40,12 @@ def thinkingTester_api():
     tt_api = ThinkingTester()
 
     yield tt_api
+
+
+@pytest.fixture
+def thinkingTester_ui():
+    tt_ui = SignInPage()
+
+    yield tt_ui
+
+    tt_ui.close()
