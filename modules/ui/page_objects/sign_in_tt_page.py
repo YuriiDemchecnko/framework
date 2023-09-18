@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.alert import Alert
 
 
 class SignInPage(Base):
@@ -42,12 +43,12 @@ class SignInPage(Base):
         )
         logout_button.click()
 
-    def open_contact(self, contact_number):
+    def open_contact(self, name):
         # Find the contact element by its number and click it to open the contact details
         try:
             element = self.wait.until(
                 EC.presence_of_element_located(
-                    (By.XPATH, f"//*[@id='myTable']/tr/td[{contact_number + 1}]")
+                    (By.XPATH, f"//td[contains(text(), '{name}')]")
                 )
             )
             element.click()
@@ -56,14 +57,7 @@ class SignInPage(Base):
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    def contact_edit(
-        self,
-        first_name,
-        last_name,
-        city,
-        dob,
-        email,
-    ):
+    def contact_edit(self, data):
         # Click the edit button to enter edit mode for the contact
         edit = self.driver.find_element(By.ID, "edit-contact")
         edit.click()
@@ -71,97 +65,42 @@ class SignInPage(Base):
         sleep(0.5)  # temp solution
 
         # Find all necessary input fields and the submit button using their locators
-        first_name_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "firstName"))
-        )
-        last_name_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "lastName"))
-        )
-        city_input = self.wait.until(EC.presence_of_element_located((By.ID, "city")))
-        dob_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "birthdate"))
-        )
-        email_input = self.wait.until(EC.presence_of_element_located((By.ID, "email")))
+        # Clear the existing value and set the new value for the input field
+        for key, value in data.items():
+            input_name = self.wait.until(EC.presence_of_element_located((By.ID, key)))
+            input_name.send_keys(Keys.CONTROL + "a")
+            input_name.send_keys(Keys.DELETE)
+            input_name.send_keys(value)
 
         submit_button = self.wait.until(
             EC.presence_of_element_located((By.ID, "submit"))
         )
 
-        # Clear the existing value and set the new value for the input field
-        first_name_input.send_keys(Keys.CONTROL + "a")
-        first_name_input.send_keys(Keys.DELETE)
-        first_name_input.send_keys(first_name)
-
-        last_name_input.send_keys(Keys.CONTROL + "a")
-        last_name_input.send_keys(Keys.DELETE)
-        last_name_input.send_keys(last_name)
-
-        city_input.send_keys(Keys.CONTROL + "a")
-        city_input.send_keys(Keys.DELETE)
-        city_input.send_keys(city)
-
-        dob_input.send_keys(Keys.CONTROL + "a")
-        dob_input.send_keys(Keys.DELETE)
-        dob_input.send_keys(dob)
-
-        email_input.send_keys(Keys.CONTROL + "a")
-        email_input.send_keys(Keys.DELETE)
-        email_input.send_keys(email)
-
         # Click the submit button to submit the form
         submit_button.click()
 
-    def add_contact(self, *args):
+    def add_contact(self, data):
         # Click the 'add a new contact' button to enter add contact mode
         add_button = self.wait.until(
             EC.presence_of_element_located((By.ID, "add-contact"))
         )
         add_button.click()
-
         # Find all necessary input fields and the submit button using their locators
-        first_name_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "firstName"))
-        )
-        last_name_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "lastName"))
-        )
-        dob_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "birthdate"))
-        )
-        email_input = self.wait.until(EC.presence_of_element_located((By.ID, "email")))
-        phone_input = self.wait.until(EC.presence_of_element_located((By.ID, "phone")))
-        street1_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "street1"))
-        )
-        street2_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "street2"))
-        )
-        city_input = self.wait.until(EC.presence_of_element_located((By.ID, "city")))
-        state_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "stateProvince"))
-        )
-        postalcode_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "postalCode"))
-        )
-        country_input = self.wait.until(
-            EC.presence_of_element_located((By.ID, "country"))
-        )
+        for key, value in data.items():
+            input_name = self.wait.until(EC.presence_of_element_located((By.ID, key)))
+            input_name.send_keys(value)
+
         submit_button = self.wait.until(
             EC.presence_of_element_located((By.ID, "submit"))
         )
-
-        # Set the new value for the input field
-        first_name_input.send_keys(args[0])
-        last_name_input.send_keys(args[1])
-        dob_input.send_keys(args[2])
-        email_input.send_keys(args[3])
-        phone_input.send_keys(args[4])
-        street1_input.send_keys(args[5])
-        street2_input.send_keys(args[6])
-        city_input.send_keys(args[7])
-        state_input.send_keys(args[8])
-        postalcode_input.send_keys(args[9])
-        country_input.send_keys(args[10])
-
         # Click the submit button to submit the form
         submit_button.click()
+
+    def delete_contact(self):
+        delete_contact_button = self.wait.until(
+            EC.presence_of_element_located((By.ID, "delete"))
+        )
+        delete_contact_button.click()
+        # Click dialog button OK
+        alert = Alert(self.driver)
+        alert.accept()
