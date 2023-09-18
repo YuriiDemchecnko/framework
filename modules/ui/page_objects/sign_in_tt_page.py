@@ -15,7 +15,10 @@ class SignInPage(Base):
         # Call the constructor of the Base class and initialize the WebDriverWait instance
         super().__init__()
         self.wait = WebDriverWait(
-            self.driver, 10, poll_frequency=1, ignored_exceptions=NoSuchElementException
+            self.driver,
+            10,
+            poll_frequency=1,
+            ignored_exceptions=NoSuchElementException,
         )
 
     def go_to(self):
@@ -104,6 +107,61 @@ class SignInPage(Base):
         email_input.send_keys(Keys.CONTROL + "a")
         email_input.send_keys(Keys.DELETE)
         email_input.send_keys(email)
+
+        # Click the submit button to submit the form
+        submit_button.click()
+
+    def add_contact(self, *args):
+        # Click the 'add a new contact' button to enter add contact mode
+        add_button = self.wait.until(
+            EC.presence_of_element_located((By.ID, "add-contact"))
+        )
+        add_button.click()
+
+        # Find all necessary input fields and the submit button using their locators
+        first_name_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "firstName"))
+        )
+        last_name_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "lastName"))
+        )
+        dob_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "birthdate"))
+        )
+        email_input = self.wait.until(EC.presence_of_element_located((By.ID, "email")))
+        phone_input = self.wait.until(EC.presence_of_element_located((By.ID, "phone")))
+        street1_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "street1"))
+        )
+        street2_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "street2"))
+        )
+        city_input = self.wait.until(EC.presence_of_element_located((By.ID, "city")))
+        state_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "stateProvince"))
+        )
+        postalcode_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "postalCode"))
+        )
+        country_input = self.wait.until(
+            EC.presence_of_element_located((By.ID, "country"))
+        )
+        submit_button = self.wait.until(
+            EC.presence_of_element_located((By.ID, "submit"))
+        )
+
+        # Set the new value for the input field
+        first_name_input.send_keys(args[0])
+        last_name_input.send_keys(args[1])
+        dob_input.send_keys(args[2])
+        email_input.send_keys(args[3])
+        phone_input.send_keys(args[4])
+        street1_input.send_keys(args[5])
+        street2_input.send_keys(args[6])
+        city_input.send_keys(args[7])
+        state_input.send_keys(args[8])
+        postalcode_input.send_keys(args[9])
+        country_input.send_keys(args[10])
 
         # Click the submit button to submit the form
         submit_button.click()
