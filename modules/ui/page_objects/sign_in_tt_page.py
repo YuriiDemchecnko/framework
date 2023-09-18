@@ -57,7 +57,15 @@ class SignInPage(Base):
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    def contact_edit(self, data):
+    def return_button_press(self):
+        return_button = self.driver.find_element(By.ID, "return")
+        return_button.click()
+
+    def cancel_button_press(self):
+        return_button = self.driver.find_element(By.ID, "cancel")
+        return_button.click()
+
+    def contact_edit(self, data={}):
         # Click the edit button to enter edit mode for the contact
         edit = self.driver.find_element(By.ID, "edit-contact")
         edit.click()
@@ -79,7 +87,7 @@ class SignInPage(Base):
         # Click the submit button to submit the form
         submit_button.click()
 
-    def add_contact(self, data):
+    def add_contact(self, data={}):
         # Click the 'add a new contact' button to enter add contact mode
         add_button = self.wait.until(
             EC.presence_of_element_located((By.ID, "add-contact"))

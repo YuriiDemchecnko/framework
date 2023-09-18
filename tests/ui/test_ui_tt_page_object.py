@@ -61,3 +61,22 @@ def test_delete_contact(thinkingTester_ui):
     thinkingTester_ui.open_contact("Larry Doe")
     thinkingTester_ui.delete_contact()
     thinkingTester_ui.logout()
+
+
+@pytest.mark.uitt
+def test_return_button_press(thinkingTester_ui):
+    thinkingTester_ui.go_to()
+    thinkingTester_ui.login()
+    thinkingTester_ui.open_contact("Garry Jeil")
+    thinkingTester_ui.return_button_press()
+    thinkingTester_ui.logout()
+
+
+@pytest.mark.uitt
+def test_cancel_button_press(thinkingTester_ui):
+    thinkingTester_ui.go_to()
+    thinkingTester_ui.login()
+    thinkingTester_ui.open_contact("Garry Jeil")
+    thinkingTester_ui.contact_edit()
+    thinkingTester_ui.cancel_button_press()
+    thinkingTester_ui.logout()
