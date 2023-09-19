@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class Base:
@@ -46,6 +47,7 @@ class Base:
     def get(self, url):
         """Navigate to the specified URL."""
         self.driver.get(url)
+        self.title = self.driver.title
 
     def find_element(self, by, value):
         """Find an element on the webpage using the specified locator strategy and locator value."""
@@ -59,3 +61,10 @@ class Base:
     def switch_to(self):
         """Switch to a different window or frame."""
         return self.driver.switch_to
+
+    def get_error_message(self):
+        """This method returns the error message displayed on the webpage."""
+        error_message_element = self.wait.until(
+            self.EC.visibility_of_element_located((By.ID, "error"))
+        )
+        return error_message_element.text

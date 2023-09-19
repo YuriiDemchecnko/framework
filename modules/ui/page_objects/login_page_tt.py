@@ -1,8 +1,6 @@
 from modules.ui.page_objects.base_tt import Base
 from selenium.webdriver.common.by import By
 
-# from selenium.webdriver.support import expected_conditions as EC
-
 
 class LoginPage(Base):
     def __init__(self, driver=None):
@@ -11,16 +9,23 @@ class LoginPage(Base):
 
     def go_to(self):
         # Navigate to the URL
-        self.get(Base.URL)
+        self.get(self.URL)
 
-    def login(self):
+    def get_title(self):
+        return self.driver.title
+
+    def login(
+        self,
+        email=Base.CREDENTIALS["email"],
+        password=Base.CREDENTIALS["pass"],
+    ):
         # Find the login elements, input the credentials and click the submit
         email_input = self.driver.find_element(By.ID, "email")
         pass_input = self.driver.find_element(By.ID, "password")
         submit_button = self.driver.find_element(By.ID, "submit")
 
-        email_input.send_keys(Base.CREDENTIALS["email"])
-        pass_input.send_keys(Base.CREDENTIALS["pass"])
+        email_input.send_keys(email)
+        pass_input.send_keys(password)
         submit_button.click()
 
     def logout(self):
