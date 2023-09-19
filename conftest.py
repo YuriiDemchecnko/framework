@@ -1,7 +1,9 @@
 import pytest
 from modules.api.clients.github import GitHub
 from modules.api.clients.thinkingtester import ThinkingTester
-from modules.ui.page_objects.sign_in_tt_page import SignInPage
+from modules.ui.page_objects.base_tt import Base
+from modules.ui.page_objects.login_page_tt import LoginPage
+from modules.ui.page_objects.contact_page_tt import ContactPage
 
 
 class User:
@@ -42,10 +44,20 @@ def thinkingTester_api():
     yield tt_api
 
 
-@pytest.fixture
-def thinkingTester_ui():
-    tt_ui = SignInPage()
+@pytest.fixture(scope="session")
+def browser_session():
+    browser = Base()
+    yield browser
+    browser.close()
 
-    yield tt_ui
 
-    tt_ui.close()
+@pytest.fixture(scope="session")
+def thinkingTester_lp(browser_session):
+    tt_login_page = LoginPage(browser_session)
+    yield tt_login_page
+
+
+@pytest.fixture(scope="session")
+def thinkingTester_cp(browser_session):
+    tt_contact_page = ContactPage(browser_session)
+    yield tt_contact_page
