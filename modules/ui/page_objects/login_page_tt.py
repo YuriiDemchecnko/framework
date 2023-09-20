@@ -7,13 +7,6 @@ class LoginPage(Base):
         # Call the constructor of the Base class
         super().__init__(driver)
 
-    def go_to(self):
-        # Navigate to the URL
-        self.get(self.URL)
-
-    def get_title(self):
-        return self.driver.title
-
     def login(
         self,
         email=Base.CREDENTIALS["email"],

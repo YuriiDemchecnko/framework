@@ -4,6 +4,7 @@ from modules.api.clients.thinkingtester import ThinkingTester
 from modules.ui.page_objects.base_tt import Base
 from modules.ui.page_objects.login_page_tt import LoginPage
 from modules.ui.page_objects.contact_page_tt import ContactPage
+from modules.ui.page_objects.sign_up_page_tt import SignupPage
 
 
 class User:
@@ -61,3 +62,9 @@ def thinkingTester_lp(browser_session):
 def thinkingTester_cp(browser_session):
     tt_contact_page = ContactPage(browser_session)
     yield tt_contact_page
+
+
+@pytest.fixture(scope="session")
+def thinkingTester_sp(browser_session):
+    tt_signup_page = SignupPage(browser_session)
+    yield tt_signup_page

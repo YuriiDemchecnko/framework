@@ -2,7 +2,6 @@ from time import sleep
 from modules.ui.page_objects.base_tt import Base
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.alert import Alert
 
 
@@ -12,25 +11,16 @@ class ContactPage(Base):
         super().__init__(driver)
 
     def open_contact(self, name):
-        # Find the contact element by its number and click it to open the contact details
-        try:
-            element = self.wait.until(
-                self.EC.presence_of_element_located(
-                    (By.XPATH, f"//td[contains(text(), '{name}')]")
-                )
+        # Find the contact element by its name and click it to open the contact details
+        element = self.wait.until(
+            self.EC.presence_of_element_located(
+                (By.XPATH, f"//td[contains(text(), '{name}')]")
             )
-            element.click()
-        except NoSuchElementException as e:
-            print(f"Element not found: {e}")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+        )
+        element.click()
 
     def return_button_press(self):
         return_button = self.driver.find_element(By.ID, "return")
-        return_button.click()
-
-    def cancel_button_press(self):
-        return_button = self.driver.find_element(By.ID, "cancel")
         return_button.click()
 
     def contact_edit(self, data={}):

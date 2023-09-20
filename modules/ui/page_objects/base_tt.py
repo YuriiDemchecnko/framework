@@ -44,10 +44,20 @@ class Base:
         """Close the current browser session."""
         self.driver.close()
 
-    def get(self, url):
-        """Navigate to the specified URL."""
+    def get_current_url(self):
+        """Return the current URL."""
+        self.URL = self.driver.current_url
+        return self.current_url
+
+    def get_title(self):
+        self.wait.until(self.EC.title_is(self.driver.title))
+        return self.driver.title
+
+    def get(self, url=URL):
+        """Navigate to the specified URL and update the title."""
         self.driver.get(url)
-        self.title = self.driver.title
+        self.current_url = self.driver.current_url
+        self.title = self.driver.title  # update the title after navigating
 
     def find_element(self, by, value):
         """Find an element on the webpage using the specified locator strategy and locator value."""
@@ -68,3 +78,7 @@ class Base:
             self.EC.visibility_of_element_located((By.ID, "error"))
         )
         return error_message_element.text
+
+    def cancel_button_press(self):
+        return_button = self.driver.find_element(By.ID, "cancel")
+        return_button.click()
