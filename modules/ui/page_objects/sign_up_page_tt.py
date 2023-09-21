@@ -1,5 +1,4 @@
 from modules.ui.page_objects.base_tt import Base
-from selenium.webdriver.common.by import By
 
 
 class SignupPage(Base):
@@ -8,7 +7,13 @@ class SignupPage(Base):
         super().__init__(driver)
 
     def signup_button_press(self):
-        signup_button = self.wait.until(
-            self.EC.presence_of_element_located((By.ID, "signup"))
-        )
-        signup_button.click()
+        self.find_element("id", "signup").click()
+
+    def add_user(self, data={}):
+        # Find all necessary input fields and the submit button
+        # using their locators
+        for key, value in data.items():
+            self.find_element("id", key).send_keys(value)
+
+        # Click the submit button to submit the form
+        self.find_element("id", "submit").click()

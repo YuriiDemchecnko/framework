@@ -76,75 +76,65 @@ def test_cancel_button_press(thinkingTester_lp, thinkingTester_cp):
 
 
 @pytest.mark.uitt
-def test_add_contact_data_without_firstname(thinkingTester_lp, thinkingTester_cp):
+@pytest.mark.parametrize(
+    "input, data",
+    [
+        (
+            "firstName",
+            {
+                "lastName": "Doe",
+                "email": "jd@fake.com",
+            },
+        ),
+        (
+            "lastName",
+            {
+                "firstName": "John",
+                "email": "jd@fake.com",
+            },
+        ),
+        (
+            "birthdate",
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "birthdate": "01-01-1965",
+            },
+        ),
+        (
+            "email",
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "email": "123",
+            },
+        ),
+        (
+            "phone",
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "phone": "123",
+            },
+        ),
+        (
+            "postalCode",
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "postalCode": "12",
+            },
+        ),
+    ],
+)
+def test_add_contact_invalid_data(
+    thinkingTester_lp,
+    thinkingTester_cp,
+    input,
+    data,
+):
     thinkingTester_cp.get()
     thinkingTester_lp.login()
-    thinkingTester_cp.add_contact(
-        {
-            "lastName": "Dow",
-            "city": "Los Angeles",
-            "stateProvince": "CA",
-            "country": "USA",
-        }
-    )
-    assert "firstName" in thinkingTester_cp.get_error_message()
-    thinkingTester_lp.logout()
-
-
-@pytest.mark.uitt
-def test_add_contact_data_without_lastname(thinkingTester_lp, thinkingTester_cp):
-    thinkingTester_cp.get()
-    thinkingTester_lp.login()
-    thinkingTester_cp.add_contact(
-        {
-            "firstName": "Garry",
-            "country": "USA",
-        }
-    )
-    assert "lastName" in thinkingTester_cp.get_error_message()
-    thinkingTester_lp.logout()
-
-
-@pytest.mark.uitt
-def test_invalid_phone_number(thinkingTester_lp, thinkingTester_cp):
-    thinkingTester_cp.get()
-    thinkingTester_lp.login()
-    thinkingTester_cp.add_contact(
-        {
-            "firstName": "Garry",
-            "lastName": "Doe",
-            "phone": "123",
-        }
-    )
-    assert "phone" in thinkingTester_cp.get_error_message()
-    thinkingTester_lp.logout()
-
-
-@pytest.mark.uitt
-def test_invalid_birthdate(thinkingTester_lp, thinkingTester_cp):
-    thinkingTester_cp.get()
-    thinkingTester_lp.login()
-    thinkingTester_cp.add_contact(
-        {
-            "firstName": "Garry",
-            "lastName": "Doe",
-            "birthdate": "01-01-1965",
-        }
-    )
-    assert "birthdate" in thinkingTester_cp.get_error_message()
-    thinkingTester_lp.logout()
-
-
-@pytest.mark.uitt
-def test_invalid_postal_code(thinkingTester_lp, thinkingTester_cp):
-    thinkingTester_cp.get()
-    thinkingTester_lp.login()
-    thinkingTester_cp.add_contact(
-        {
-            "firstName": "Garry",
-            "lastName": "Doe",
-            "postalCode": "12",
-        }
-    )
-    assert "postalCode" in thinkingTester_cp.get_error_message()
+    thinkingTester_cp.add_contact(data)
+    assert input in thinkingTester_cp.get_error_message()
     thinkingTester_lp.logout()

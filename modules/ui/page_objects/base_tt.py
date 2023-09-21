@@ -20,7 +20,8 @@ class Base:
     def __init__(self, driver=None):
         """
         Initialize the WebDriverWait instance.
-        If no driver is provided, a new Chrome webdriver instance is created with the specified options.
+        If no driver is provided, a new Chrome webdriver instance is created
+        with the specified options.
         """
         if driver is None:
             chrome_options = webdriver.ChromeOptions()
@@ -46,7 +47,7 @@ class Base:
 
     def get_current_url(self):
         """Return the current URL."""
-        self.URL = self.driver.current_url
+        self.URL = self.current_url
         return self.current_url
 
     def get_title(self):
@@ -60,8 +61,18 @@ class Base:
         self.title = self.driver.title  # update the title after navigating
 
     def find_element(self, by, value):
-        """Find an element on the webpage using the specified locator strategy and locator value."""
-        return self.driver.find_element(by, value)
+        """Find an element on the webpage using the specified locator strategy
+        and locator value.
+        """
+        # return self.driver.find_element(by, value)
+        return self.wait.until(
+            self.EC.visibility_of_element_located(
+                (
+                    by,
+                    value,
+                )
+            )
+        )
 
     def execute(self, script, *args):
         """Execute the specified JavaScript script."""
@@ -74,11 +85,7 @@ class Base:
 
     def get_error_message(self):
         """This method returns the error message displayed on the webpage."""
-        error_message_element = self.wait.until(
-            self.EC.visibility_of_element_located((By.ID, "error"))
-        )
-        return error_message_element.text
+        return self.find_element("id", "error").text
 
     def cancel_button_press(self):
-        return_button = self.driver.find_element(By.ID, "cancel")
-        return_button.click()
+        self.find_element("id", "cancel").click()

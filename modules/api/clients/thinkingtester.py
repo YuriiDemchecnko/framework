@@ -125,3 +125,9 @@ class ThinkingTester:
 
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
+
+    def add_user(self, data={}):
+        pass
+
+    def delete_user(self, first_name):
+        pass
