@@ -4,21 +4,25 @@ import json
 
 class ThinkingTester:
     def __init__(self) -> None:
-        # The URL of the API's login endpoint
-        login_url = "https://thinking-tester-contact-list.herokuapp.com/users/login"
+        self.login()
 
-        # User credentials
-        payload = {"email": "d1@example.com", "password": "1234567"}
+    def login(
+        self,
+        payload={
+            "email": "john.d@fake.com",
+            "password": "myPassword",
+        },
+    ):
+        login_url = "https://thinking-tester-contact-list.herokuapp.com/users/login"
+        # payload = {"email": "d1@example.com", "password": "1234567"}
 
         try:
-            # Send the POST request
             response = requests.post(
                 login_url,
                 data=json.dumps(payload),
                 headers={"Content-Type": "application/json"},
             )
 
-            # If the request was successful, the server will respond with a JSON object that includes an access token
             if response.status_code == 200:
                 self.token = response.json().get("token")
             else:
@@ -45,9 +49,6 @@ class ThinkingTester:
             return f"An error occurred: {e}"
 
     def get_user_profile(self):
-        if self.token is None:
-            return "No token available."
-
         url = "https://thinking-tester-contact-list.herokuapp.com/users/me"
         headers = {
             "Authorization": self.token,
@@ -90,7 +91,8 @@ class ThinkingTester:
 
                 try:
                     response = requests.get(url, headers=headers)
-                    return response.json()  # returns json data if OK and None if not
+                    return response.json()  # returns json data if OK and None
+                    # if not
 
                 except requests.exceptions.RequestException as e:
                     return f"An error occurred: {e}"
@@ -126,8 +128,32 @@ class ThinkingTester:
         except requests.exceptions.RequestException as e:
             return f"An error occurred: {e}"
 
-    def add_user(self, data={}):
-        pass
+    def add_user(self, user_data):
+        url = "https://thinking-tester-contact-list.herokuapp.com/users"
+        headers = {
+            "Content-Type": "application/json",
+        }
 
-    def delete_user(self, first_name):
-        pass
+        try:
+            response = requests.post(
+                url,
+                headers=headers,
+                data=json.dumps(user_data),
+            )
+            return response.json()  # Returns new user data
+
+        except requests.exceptions.RequestException as e:
+            return f"An error occurred: {e}"
+
+    def delete_user(self):
+        url = "https://thinking-tester-contact-list.herokuapp.com/users/me"
+        headers = {
+            "Authorization": f"Bearer {self.token}",
+        }
+
+        try:
+            response = requests.delete(url, headers=headers)
+            return response.status_code  # returns 200 if OK
+
+        except requests.exceptions.RequestException as e:
+            return f"An error occurred: {e}"

@@ -4,7 +4,7 @@ import pytest
 @pytest.mark.uitt
 def test_login_page_exists(thinkingTester_lp):
     thinkingTester_lp.get()
-    assert thinkingTester_lp.get_title() == "Contact List App"
+    assert thinkingTester_lp.get_title().text == "Contact List App"
 
 
 @pytest.mark.uitt

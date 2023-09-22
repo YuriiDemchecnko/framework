@@ -17,3 +17,6 @@ class SignupPage(Base):
 
         # Click the submit button to submit the form
         self.find_element("id", "submit").click()
+
+    def get_title(self):
+        return self.find_element("xpath", "/html/body/div/header/h1")

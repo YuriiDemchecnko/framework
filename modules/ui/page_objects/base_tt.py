@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 
 
 class Base:
@@ -45,15 +44,6 @@ class Base:
         """Close the current browser session."""
         self.driver.close()
 
-    def get_current_url(self):
-        """Return the current URL."""
-        self.URL = self.current_url
-        return self.current_url
-
-    def get_title(self):
-        self.wait.until(self.EC.title_is(self.driver.title))
-        return self.driver.title
-
     def get(self, url=URL):
         """Navigate to the specified URL and update the title."""
         self.driver.get(url)
@@ -64,7 +54,6 @@ class Base:
         """Find an element on the webpage using the specified locator strategy
         and locator value.
         """
-        # return self.driver.find_element(by, value)
         return self.wait.until(
             self.EC.visibility_of_element_located(
                 (

@@ -16,6 +16,9 @@ class LoginPage(Base):
         self.find_element("id", "password").send_keys(password)
         self.find_element("id", "submit").click()
 
+    def get_title(self):
+        return self.find_element("xpath", "/html/body/h1")
+
     def logout(self):
         # Find the logout button and click it
         self.find_element("id", "logout").click()
